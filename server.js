@@ -37,7 +37,7 @@ var exercisesSchema = new Schema({
 
 var Exercises = mongoose.model('Exercises', exercisesSchema);
 
-app.post('/api/exercise/new-user', function (req, res) {
+app.post('/api/exercise/new-user', function(req, res) {
   let username = req.body.username;
   let _id = '';
   
@@ -60,7 +60,7 @@ app.post('/api/exercise/new-user', function (req, res) {
   });
 });
 
-app.post('/api/exercise/add', function (req, res) {
+app.post('/api/exercise/add', function(req, res) {
   let userId = (req.body.userId !== '' ? req.body.userId : res.json({ error: 'userId is required' }));
   let description = (req.body.description !== '' ? req.body.description : res.json({ error: 'description is required' }));
   let duration = (req.body.duration !== '' ? req.body.duration : res.json({ error: 'duration is required' }));
@@ -86,7 +86,7 @@ app.post('/api/exercise/add', function (req, res) {
   });
 });
 
-app.get('/api/exercise/users', function (req, res) {
+app.get('/api/exercise/users', function(req, res) {
   ExerciseUsers.find({}, function(err, data) {
     if (!err) {
       res.json(data);
@@ -94,7 +94,7 @@ app.get('/api/exercise/users', function (req, res) {
   });
 });
 
-app.get('/api/exercise/log', function (req, res) {
+app.get('/api/exercise/log', function(req, res) {
   if (req.query.userId === undefined) {
     res.json({ error: 'userId is required' });
   }
