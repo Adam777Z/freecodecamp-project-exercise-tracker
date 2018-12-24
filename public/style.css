@@ -1,10 +1,9 @@
-
-* {
+/* * {
   box-sizing: border-box;
 }
 
 body {
-  font-family:sans-serif;
+  font-family: sans-serif;
   margin: 25px;
   color: #222;
   background-color: #f5f5f5;
@@ -12,7 +11,6 @@ body {
 
 h1 {
   font-weight: bold;
-  
 }
 
 .bold {
@@ -21,7 +19,7 @@ h1 {
 
 p {
   max-width: 900px;
-}
+} */
 
 form {
   margin-bottom: 25px;
@@ -58,7 +56,11 @@ input[type=submit]:hover {
 
 code {
   font-family: monospace;
-  font-size: 1.2em;
+  font-size: 1em;
   background-color: #FFFEC4;
   padding: 2px;
+}
+
+.jumbotron {
+	margin-top: 2rem;
 }
