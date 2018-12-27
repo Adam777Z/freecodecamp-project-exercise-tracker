@@ -1,8 +1,9 @@
-# Exercise Tracker REST API
+**freeCodeCamp** - APIs and Microservices Project
+------
 
-#### A microservice project, part of freeCodeCamp's curriculum
+**Exercise Tracker REST API**
 
-### User Stories
+### User Stories:
 
 1. I can create a user by posting form data username to /api/exercise/new-user and returned will be an object with username and _id.
 2. I can get an array of all users by getting api/exercise/users with the same info as when creating a user.
