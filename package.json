@@ -1,7 +1,7 @@
 {
-	"name": "fcc-exercise-tracker",
-	"version": "0.1.0",
-	"description": "A REST API project, part of freeCodeCamp's curriculum",
+	"name": "Exercise Tracker",
+	"version": "1.0.0",
+	"description": "freeCodeCamp - APIs and Microservices Project: Exercise Tracker REST API",
 	"author": "Adam",
 	"main": "server.js",
 	"scripts": {
@@ -19,11 +19,12 @@
 		"node": "10.14.1"
 	},
 	"repository": {
-		"url": "https://gomix.com/#!/project/welcome-project"
+		"type": "git",
+		"url": "https://github.com/Adam111/freecodecamp-project-exercise-tracker"
 	},
 	"keywords": [
+		"glitch",
 		"node",
-		"gomix",
 		"express",
 		"freecodecamp"
 	],
