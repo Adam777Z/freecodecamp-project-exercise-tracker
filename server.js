@@ -51,19 +51,31 @@ app.post('/api/exercise/new-user', function(req, res) {
         if (!err) {
           _id = data['_id'];
           
-          res.json({ username: username, _id: _id });
+          return res.json({ username: username, _id: _id });
         }
       });
     } else {
-      res.json({ error: 'username already exists' });
+      return res.json({ error: 'username already exists' });
     }
   });
 });
 
 app.post('/api/exercise/add', function(req, res) {
-  let userId = (req.body.userId !== '' ? req.body.userId : res.json({ error: 'userId is required' }));
-  let description = (req.body.description !== '' ? req.body.description : res.json({ error: 'description is required' }));
-  let duration = (req.body.duration !== '' ? req.body.duration : res.json({ error: 'duration is required' }));
+  if (req.body.userId === '') {
+    return res.json({ error: 'userId is required' });
+  }
+  
+  if (req.body.description === '') {
+    return res.json({ error: 'description is required' });
+  }
+  
+  if (req.body.duration === '') {
+    return res.json({ error: 'duration is required' });
+  }
+  
+  let userId = req.body.userId;
+  let description = req.body.description;
+  let duration = req.body.duration;
   let date = (req.body.date !== '' ? new Date(req.body.date) : new Date());
   
   ExerciseUsers.findById(userId, function(err, data) {
@@ -77,11 +89,11 @@ app.post('/api/exercise/add', function(req, res) {
 
       newExercise.save(function(err2, data2) {
         if (!err2) {
-          res.json({ username: data['username'], _id: data['_id'], description: data2['description'], duration: data2['duration'], date: data2['date'] });
+          return res.json({ username: data['username'], _id: data['_id'], description: data2['description'], duration: data2['duration'], date: data2['date'] });
         }
       });
     } else {
-      res.json({ error: 'user not found' });
+      return res.json({ error: 'user not found' });
     }
   });
 });
@@ -89,17 +101,17 @@ app.post('/api/exercise/add', function(req, res) {
 app.get('/api/exercise/users', function(req, res) {
   ExerciseUsers.find({}, function(err, data) {
     if (!err) {
-      res.json(data);
+      return res.json(data);
     }
   });
 });
 
 app.get('/api/exercise/log', function(req, res) {
-  if (req.query.userId === undefined) {
-    res.json({ error: 'userId is required' });
+  if (req.query.userId === undefined || req.query.userId === '') {
+    return res.json({ error: 'userId is required' });
   }
   
-  let userId = (req.query.userId !== '' ? req.query.userId : res.json({ error: 'userId is required' }));
+  let userId = req.query.userId;
   let findConditions = { userId: userId };
   
   if ((req.query.from !== undefined && req.query.from !== '') || (req.query.to !== undefined && req.query.to !== '')) {
@@ -120,7 +132,7 @@ app.get('/api/exercise/log', function(req, res) {
     if (!err && data !== null) {
       Exercises.find(findConditions).sort({ date: 'asc' }).limit(limit).exec(function(err2, data2) {
         if (!err2) {
-          res.json({
+          return res.json({
             username: data['username'],
             _id: data['_id'],
             log: data2.map(function(e) { return { description: e.description, duration: e.duration, date: e.date }; }),
@@ -129,7 +141,7 @@ app.get('/api/exercise/log', function(req, res) {
         }
       });
     } else {
-      res.json({ error: 'user not found' });
+      return res.json({ error: 'user not found' });
     }
   });
 });
