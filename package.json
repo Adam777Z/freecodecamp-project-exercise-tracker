@@ -1,7 +1,7 @@
 {
   "name": "freecodecamp-project-exercise-tracker",
-  "version": "1.0.0",
   "description": "freeCodeCamp - APIs and Microservices Project: Exercise Tracker REST API",
+  "version": "1.0.0",
   "author": "Adam",
   "main": "server.js",
   "scripts": {
