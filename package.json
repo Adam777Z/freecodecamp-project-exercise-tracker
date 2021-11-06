@@ -3,10 +3,17 @@
   "description": "freeCodeCamp - APIs and Microservices Project: Exercise Tracker REST API",
   "version": "1.0.0",
   "author": "Adam",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
+  "keywords": [
+    "glitch",
+    "node",
+    "express",
+    "freecodecamp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Adam777Z/freecodecamp-project-exercise-tracker.git"
   },
+  "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
     "mongodb": "^3.6.2",
@@ -15,18 +22,11 @@
     "body-parser": "^1.19.0",
     "shortid": "^2.2.16"
   },
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
   "engines": {
     "node": "10.14.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Adam777Z/freecodecamp-project-exercise-tracker.git"
-  },
-  "keywords": [
-    "glitch",
-    "node",
-    "express",
-    "freecodecamp"
-  ],
-  "license": "MIT"
+  }
 }
