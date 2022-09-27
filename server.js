@@ -36,7 +36,11 @@ var exercisesSchema = new Schema({
 
 var Exercises = mongoose.model('Exercises', exercisesSchema);
 
-app.post('/api/exercise/new-user', function(req, res) {
+app.post('/api/users', function(req, res) {
+  if (req.body.username === '') {
+    return res.json({ error: 'username is required' });
+  }
+  
   let username = req.body.username;
   let _id = '';
   
@@ -50,7 +54,10 @@ app.post('/api/exercise/new-user', function(req, res) {
         if (!err) {
           _id = data['_id'];
           
-          return res.json({ username: username, _id: _id });
+          return res.json({
+            _id: _id,
+            username: username
+          });
         }
       });
     } else {
@@ -59,9 +66,17 @@ app.post('/api/exercise/new-user', function(req, res) {
   });
 });
 
-app.post('/api/exercise/add', function(req, res) {
-  if (req.body.userId === '') {
-    return res.json({ error: 'userId is required' });
+app.get('/api/users', function(req, res) {
+  ExerciseUsers.find({}, function(err, data) {
+    if (!err) {
+      return res.json(data);
+    }
+  });
+});
+
+app.post('/api/users/:_id/exercises', function(req, res) {
+  if (req.params._id === '0') {
+    return res.json({ error: '_id is required' });
   }
   
   if (req.body.description === '') {
@@ -72,10 +87,18 @@ app.post('/api/exercise/add', function(req, res) {
     return res.json({ error: 'duration is required' });
   }
   
-  let userId = req.body.userId;
+  let userId = req.params._id;
   let description = req.body.description;
-  let duration = req.body.duration;
-  let date = (req.body.date !== '' ? new Date(req.body.date) : new Date());
+  let duration = parseInt(req.body.duration);
+  let date = (req.body.date !== undefined ? new Date(req.body.date) : new Date());
+
+  if (isNaN(duration)) {
+    return res.json({ error: 'duration is not a number' });
+  }
+
+  if (date == 'Invalid Date') {
+    return res.json({ error: 'date is invalid' });
+  }
   
   ExerciseUsers.findById(userId, function(err, data) {
     if (!err && data !== null) {
@@ -88,7 +111,13 @@ app.post('/api/exercise/add', function(req, res) {
 
       newExercise.save(function(err2, data2) {
         if (!err2) {
-          return res.json({ username: data['username'], _id: data['_id'], description: data2['description'], duration: data2['duration'], date: data2['date'] });
+          return res.json({
+            _id: data['_id'],
+            username: data['username'],
+            description: data2['description'],
+            duration: data2['duration'],
+            date: new Date(data2['date']).toDateString()
+          });
         }
       });
     } else {
@@ -97,44 +126,58 @@ app.post('/api/exercise/add', function(req, res) {
   });
 });
 
-app.get('/api/exercise/users', function(req, res) {
-  ExerciseUsers.find({}, function(err, data) {
-    if (!err) {
-      return res.json(data);
-    }
-  });
+app.get('/api/users/:_id/exercises', function(req, res) {
+  res.redirect('/api/users/' + req.params._id + '/logs');
 });
 
-app.get('/api/exercise/log', function(req, res) {
-  if (req.query.userId === undefined || req.query.userId === '') {
-    return res.json({ error: 'userId is required' });
-  }
-  
-  let userId = req.query.userId;
+app.get('/api/users/:_id/logs', function(req, res) {
+  let userId = req.params._id;
   let findConditions = { userId: userId };
   
-  if ((req.query.from !== undefined && req.query.from !== '') || (req.query.to !== undefined && req.query.to !== '')) {
+  if (
+    (req.query.from !== undefined && req.query.from !== '')
+    ||
+    (req.query.to !== undefined && req.query.to !== '')
+  ) {
     findConditions.date = {};
     
     if (req.query.from !== undefined && req.query.from !== '') {
       findConditions.date.$gte = new Date(req.query.from);
     }
+
+    if (findConditions.date.$gte == 'Invalid Date') {
+      return res.json({ error: 'from date is invalid' });
+    }
     
     if (req.query.to !== undefined && req.query.to !== '') {
       findConditions.date.$lte = new Date(req.query.to);
     }
+
+    if (findConditions.date.$lte == 'Invalid Date') {
+      return res.json({ error: 'to date is invalid' });
+    }
   }
   
-  let limit = (req.query.limit !== '' ? parseInt(req.query.limit) : 0);
+  let limit = (req.query.limit !== undefined ? parseInt(req.query.limit) : 0);
+
+  if (isNaN(limit)) {
+    return res.json({ error: 'limit is not a number' });
+  }
   
   ExerciseUsers.findById(userId, function(err, data) {
     if (!err && data !== null) {
       Exercises.find(findConditions).sort({ date: 'asc' }).limit(limit).exec(function(err2, data2) {
         if (!err2) {
           return res.json({
-            username: data['username'],
             _id: data['_id'],
-            log: data2.map(function(e) { return { description: e.description, duration: e.duration, date: e.date }; }),
+            username: data['username'],
+            log: data2.map(function(e) {
+              return {
+                description: e.description,
+                duration: e.duration,
+                date: new Date(e.date).toDateString()
+              };
+            }),
             count: data2.length
           });
         }

@@ -41,7 +41,7 @@ input {
   font-size: 16px;
 }
 
-input[type=submit] {
+input[type="submit"] {
   font-size: 16px;
   border-radius: 3px;
   background-color: #E4F1FE;
@@ -50,8 +50,13 @@ input[type=submit] {
   cursor: pointer;
 }
 
-input[type=submit]:hover {
+input[type="submit"]:hover {
   background-color: #FFFEC4;
+}
+
+input[type="submit"]:active {
+  position: relative;
+  top: 1px;
 }
 
 code {
