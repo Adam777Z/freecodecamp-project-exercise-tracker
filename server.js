@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
-app.use(express.static('public'));
+app.use('/public', express.static(process.cwd() + '/public'));
+
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
@@ -40,10 +41,10 @@ app.post('/api/users', function(req, res) {
   if (req.body.username === '') {
     return res.json({ error: 'username is required' });
   }
-  
+
   let username = req.body.username;
   let _id = '';
-  
+
   ExerciseUsers.findOne({ username: username }, function(err, data) {
     if (!err && data === null) {
       let newUser = new ExerciseUsers({
@@ -53,7 +54,7 @@ app.post('/api/users', function(req, res) {
       newUser.save(function(err, data) {
         if (!err) {
           _id = data['_id'];
-          
+
           return res.json({
             _id: _id,
             username: username
@@ -78,15 +79,15 @@ app.post('/api/users/:_id/exercises', function(req, res) {
   if (req.params._id === '0') {
     return res.json({ error: '_id is required' });
   }
-  
+
   if (req.body.description === '') {
     return res.json({ error: 'description is required' });
   }
-  
+
   if (req.body.duration === '') {
     return res.json({ error: 'duration is required' });
   }
-  
+
   let userId = req.params._id;
   let description = req.body.description;
   let duration = parseInt(req.body.duration);
@@ -99,7 +100,7 @@ app.post('/api/users/:_id/exercises', function(req, res) {
   if (date == 'Invalid Date') {
     return res.json({ error: 'date is invalid' });
   }
-  
+
   ExerciseUsers.findById(userId, function(err, data) {
     if (!err && data !== null) {
       let newExercise = new Exercises({
@@ -133,14 +134,14 @@ app.get('/api/users/:_id/exercises', function(req, res) {
 app.get('/api/users/:_id/logs', function(req, res) {
   let userId = req.params._id;
   let findConditions = { userId: userId };
-  
+
   if (
     (req.query.from !== undefined && req.query.from !== '')
     ||
     (req.query.to !== undefined && req.query.to !== '')
   ) {
     findConditions.date = {};
-    
+
     if (req.query.from !== undefined && req.query.from !== '') {
       findConditions.date.$gte = new Date(req.query.from);
     }
@@ -148,7 +149,7 @@ app.get('/api/users/:_id/logs', function(req, res) {
     if (findConditions.date.$gte == 'Invalid Date') {
       return res.json({ error: 'from date is invalid' });
     }
-    
+
     if (req.query.to !== undefined && req.query.to !== '') {
       findConditions.date.$lte = new Date(req.query.to);
     }
@@ -157,13 +158,13 @@ app.get('/api/users/:_id/logs', function(req, res) {
       return res.json({ error: 'to date is invalid' });
     }
   }
-  
+
   let limit = (req.query.limit !== undefined ? parseInt(req.query.limit) : 0);
 
   if (isNaN(limit)) {
     return res.json({ error: 'limit is not a number' });
   }
-  
+
   ExerciseUsers.findById(userId, function(err, data) {
     if (!err && data !== null) {
       Exercises.find(findConditions).sort({ date: 'asc' }).limit(limit).exec(function(err2, data2) {
