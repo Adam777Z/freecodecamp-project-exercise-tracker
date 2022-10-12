@@ -10,64 +10,62 @@
 </head>
 <body>
 	<div class="container">
-		<div class="row">
-			<div class="col">
-				<div class="jumbotron p-4">
-					<div class="container">
-						<h1 id="title" class="text-center">Exercise Tracker</h1>
+		<div class="p-4 my-4 bg-light rounded-3">
+			<div class="row">
+				<div class="col">
+					<h1 id="title" class="text-center">Exercise Tracker</h1>
 
-						<div class="text-center">
-							<div class="row">
-								<div class="col">
-									<form action="/api/users" method="post">
-										<h3>Create a new user</h3>
-										<p><code>POST /api/users</code></p>
-										<input id="uname" type="text" name="username" placeholder="username">
-										<input type="submit" value="Submit">
-									</form>
+					<div class="text-center">
+						<div class="row">
+							<div class="col">
+								<form action="/api/users" method="post">
+									<h3>Create a new user</h3>
+									<p><code>POST /api/users</code></p>
+									<input id="uname" type="text" name="username" placeholder="username">
+									<input type="submit" value="Submit">
+								</form>
 
-									<form id="add-exercise-form" action="/api/users/_id/exercises" method="post">
-										<h3>Add exercise</h3>
-										<p><code>POST /api/users/_id/exercises</code></p>
-										<input id="uid" type="text" name="_id" placeholder="_id*">
-										<input id="desc" type="text" name="description" placeholder="description*">
-										<input id="dur" type="text" name="duration" placeholder="duration (minutes)*">
-										<input id="dat" type="text" name="date" placeholder="date (yyyy-mm-dd)">
-										<input type="submit" value="Submit">
-									</form>
+								<form id="add-exercise-form" action="/api/users/_id/exercises" method="post">
+									<h3>Add exercise</h3>
+									<p><code>POST /api/users/_id/exercises</code></p>
+									<input id="uid" type="text" name="_id" placeholder="_id*">
+									<input id="desc" type="text" name="description" placeholder="description*">
+									<input id="dur" type="text" name="duration" placeholder="duration (minutes)*">
+									<input id="dat" type="text" name="date" placeholder="date (yyyy-mm-dd)">
+									<input type="submit" value="Submit">
+								</form>
 
-									<script>
-									document.addEventListener('DOMContentLoaded', (event) => {
-										document.querySelector('#add-exercise-form').addEventListener('submit', (event2) => {
-											event2.preventDefault();
+								<script>
+								document.addEventListener('DOMContentLoaded', (event) => {
+									document.querySelector('#add-exercise-form').addEventListener('submit', (event2) => {
+										event2.preventDefault();
 
-											let userId = document.querySelector('#uid').value;
+										let userId = document.querySelector('#uid').value;
 
-											if (userId === '') {
-												userId = '0';
-											}
+										if (userId === '') {
+											userId = '0';
+										}
 
-											event2.target.action = '/api/users/' + userId + '/exercises';
-											event2.target.submit();
-										});
+										event2.target.action = '/api/users/' + userId + '/exercises';
+										event2.target.submit();
 									});
-									</script>
-								</div>
+								});
+								</script>
 							</div>
 						</div>
-
-						<div>
-							<p><strong>GET user's exercise log: </strong><code>GET /api/users/_id/logs[?from][&amp;to][&amp;limit]</code><br>
-								<strong>[ ]</strong> = optional<br>
-								<strong>from, to</strong> = dates (yyyy-mm-dd); <strong>limit</strong> = number</p>
-						</div>
-
-						<div>
-							<p><strong>GET all users</strong>: <a href="/api/users" target="_blank">/api/users</a></p>
-						</div>
-
-						<div class="footer text-center">by <a href="https://www.freecodecamp.org" target="_blank">freeCodeCamp</a> & <a href="https://www.freecodecamp.org/adam777" target="_blank">Adam</a> | <a href="https://github.com/Adam777Z/freecodecamp-project-exercise-tracker" target="_blank">GitHub</a></div>
 					</div>
+
+					<div>
+						<p><strong>GET user's exercise log: </strong><code>GET /api/users/_id/logs[?from][&amp;to][&amp;limit]</code><br>
+							<strong>[ ]</strong> = optional<br>
+							<strong>from, to</strong> = dates (yyyy-mm-dd); <strong>limit</strong> = number</p>
+					</div>
+
+					<div>
+						<p><strong>GET all users</strong>: <a href="/api/users" target="_blank">/api/users</a></p>
+					</div>
+
+					<div class="footer text-center">by <a href="https://www.freecodecamp.org" target="_blank">freeCodeCamp</a> & <a href="https://www.freecodecamp.org/adam777" target="_blank">Adam</a> | <a href="https://github.com/Adam777Z/freecodecamp-project-exercise-tracker" target="_blank">GitHub</a></div>
 				</div>
 			</div>
 		</div>
